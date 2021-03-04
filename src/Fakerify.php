@@ -8,7 +8,7 @@ use wpdb;
 class Fakerify
 {
     protected $faker;
-    protected wpdb $wpdb;
+    protected $wpdb;
     public $perPage = 1000;
 
     public function __construct($faker = null)
