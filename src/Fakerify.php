@@ -31,7 +31,7 @@ class Fakerify
         $timer = microtime(true);
 
         $perPage = 1000;
-        $count = $this->wpdb->get_var("SELECT COUNT(*) FROM {$this->wpdb->users} WHERE ID <= 2000");
+        $count = $this->wpdb->get_var("SELECT COUNT(*) FROM {$this->wpdb->users} WHERE ID");
         $pages = ceil($count / $perPage);
 
         for ($page = 1; $page <= $pages; $page++) {
