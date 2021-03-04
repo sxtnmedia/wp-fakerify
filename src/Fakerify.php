@@ -9,7 +9,7 @@ class Fakerify
 {
     protected $faker;
     protected $wpdb;
-    public $perPage = 1000;
+    public $perPage = 2000;
 
     public function __construct($faker = null)
     {
@@ -29,12 +29,11 @@ class Fakerify
     public function run($queryArgs = [])
     {
         $timer = microtime(true);
-
-        $perPage = 1000;
+        
         $count = $this->wpdb->get_var("SELECT COUNT(*) FROM {$this->wpdb->users}");
-        $pages = ceil($count / $perPage);
+        $pages = ceil($count / $this->perPage);
 
-        for ($page = 1; $page <= $pages; $page++) {
+        for ($page = 1; $page <= $pages; $page++) {          
             $this->replace($this->getUsers($page, $queryArgs));
         }
 
@@ -52,6 +51,7 @@ class Fakerify
             'number' => $this->perPage,
             'paged' => $page,
             'role__not_in' => ['Administrator'],
+            'fields' => ['ID'],
         ], $queryArgs));
 
         return $usersQuery->get_results();
@@ -105,21 +105,21 @@ class Fakerify
                 'shipping_company' => $company,
             ];
 
-            $meta = array_filter(get_user_meta($user->ID), function ($v) {
-                return !empty($v) && strlen($v[0]);
-            });
+            $metaResults = $this->wpdb->get_results("SELECT meta_key FROM {$this->wpdb->usermeta} WHERE user_id = {$user->ID}");
+            foreach($metaResults as $metaItem) {
+                $key = $metaItem->meta_key;
 
-            foreach ($metaToUpdate as $metaKey => $metaItem) {
-                if (in_array($metaKey, $meta)) {
-
+                if(isset($metaToUpdate[$key])) {
                     $this->wpdb->update($this->wpdb->usermeta, [
-                        'meta_value' => $metaItem,
+                        'meta_value' => $metaToUpdate[$key],
                     ], [
-                        'meta_key' => $metaKey,
+                        'meta_key' => $key,
                         'user_id' => $user->ID,
-                    ]);
+                    ]);                    
                 }
             }
         }
     }
 }
+
+
