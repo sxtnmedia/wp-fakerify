@@ -1,0 +1,27 @@
+{
+    "name": "sxtnmedia/wp-fakerify",
+    "type": "library",
+    "description": "Fake wordpress personal user data",
+    "keywords": [
+        "wordpress",
+        "wp",
+        "faker",
+        "fakerify",
+        "rodo",
+        "gdpr"
+    ],
+    "license": "WTFPL",
+    "authors": [
+        {
+            "name": "Patryk Kleszyński"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.13"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sxtnmedia\\Wp\\": "src/"
+        }
+    }
+}
